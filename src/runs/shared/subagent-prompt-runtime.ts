@@ -1,4 +1,5 @@
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { SUBAGENT_GUIDANCE_END, SUBAGENT_GUIDANCE_START } from "./subagent-guidance.ts";
 
 const SUBAGENT_INHERIT_PROJECT_CONTEXT_ENV = "PI_SUBAGENT_INHERIT_PROJECT_CONTEXT";
 const SUBAGENT_INHERIT_SKILLS_ENV = "PI_SUBAGENT_INHERIT_SKILLS";
@@ -62,6 +63,14 @@ export function stripSubagentOrchestrationSkill(prompt: string): string {
 		.replace(/[ \t]*<skill>\s*[\s\S]*?<\/skill>\s*/g, (block) => SUBAGENT_ORCHESTRATION_SKILL_NAME_PATTERN.test(block) ? "" : block);
 }
 
+export function stripSubagentGuidanceBlock(prompt: string): string {
+	const start = prompt.indexOf(SUBAGENT_GUIDANCE_START);
+	if (start === -1) return prompt;
+	const end = prompt.indexOf(SUBAGENT_GUIDANCE_END, start);
+	if (end === -1) return prompt;
+	return `${prompt.slice(0, start)}${prompt.slice(end + SUBAGENT_GUIDANCE_END.length)}`.replace(/\n{3,}/g, "\n\n").trim();
+}
+
 export function rewriteSubagentPrompt(
 	prompt: string,
 	options: { inheritProjectContext: boolean; inheritSkills: boolean },
@@ -74,6 +83,7 @@ export function rewriteSubagentPrompt(
 		rewritten = stripInheritedSkills(rewritten);
 	}
 	rewritten = stripSubagentOrchestrationSkill(rewritten);
+	rewritten = stripSubagentGuidanceBlock(rewritten);
 	return rewritten.includes(CHILD_SUBAGENT_BOUNDARY_INSTRUCTIONS)
 		? rewritten
 		: `${CHILD_SUBAGENT_BOUNDARY_INSTRUCTIONS}\n\n${rewritten}`;

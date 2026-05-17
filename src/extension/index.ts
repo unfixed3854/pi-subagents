@@ -34,6 +34,7 @@ import { clearSlashSnapshots, getSlashRenderableSnapshot, resolveSlashMessageDet
 import { inspectSubagentStatus } from "../runs/background/run-status.ts";
 import registerSubagentNotify, { type SubagentNotifyDetails } from "../runs/background/notify.ts";
 import { SUBAGENT_CHILD_ENV } from "../runs/shared/pi-args.ts";
+import { appendSubagentGuidanceToPrompt } from "../runs/shared/subagent-guidance.ts";
 import { formatDuration, shortenPath } from "../shared/formatters.ts";
 import {
 	type Details,
@@ -283,6 +284,11 @@ export default function registerSubagentExtension(pi: ExtensionAPI): void {
 	globalStore[runtimeCleanupStoreKey] = runtimeCleanup;
 
 	const { ensurePoller, handleStarted, handleComplete, resetJobs } = createAsyncJobTracker(pi, state, ASYNC_DIR);
+	pi.on("before_agent_start", (event) => {
+		if (!pi.getActiveTools().includes("subagent")) return {};
+		const systemPrompt = appendSubagentGuidanceToPrompt(event.systemPrompt, event.systemPromptOptions.cwd);
+		return systemPrompt === event.systemPrompt ? {} : { systemPrompt };
+	});
 	const executor = createSubagentExecutor({
 		pi,
 		state,
@@ -401,11 +407,10 @@ export default function registerSubagentExtension(pi: ExtensionAPI): void {
 		description: `Delegate to subagents or manage agent definitions.
 
 EXECUTION (use exactly ONE mode):
-• Before executing, use { action: "list" } to inspect configured agents/chains. Only execute agents listed as executable/non-disabled.
 • SINGLE: { agent, task? } - one task; omit task for self-contained agents
 • CHAIN: { chain: [{agent:"agent-a"}, {parallel:[{agent:"agent-b",count:3}]}] } - sequential pipeline with optional parallel fan-out
 • PARALLEL: { tasks: [{agent,task,count?,output?,reads?,progress?}, ...], concurrency?: number, worktree?: true } - concurrent execution (worktree: isolate each task in a git worktree)
-• Optional context: { context: "fresh" | "fork" } (default: if any requested agent has defaultContext: "fork", the whole invocation uses fork; otherwise "fresh"; inspect agent defaults via { action: "list" })
+• Optional context: { context: "fresh" | "fork" } (default: if any requested agent has defaultContext: "fork", the whole invocation uses fork; otherwise "fresh")
 
 CHAIN TEMPLATE VARIABLES (use in task strings):
 • {task} - The original task/request from the user

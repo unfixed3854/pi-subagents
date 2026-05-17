@@ -7,8 +7,10 @@ import registerSubagentPromptRuntime, {
 	stripInheritedSkills,
 	stripParentOnlySubagentMessages,
 	stripProjectContext,
+	stripSubagentGuidanceBlock,
 	stripSubagentOrchestrationSkill,
 } from "../../src/runs/shared/subagent-prompt-runtime.ts";
+import { SUBAGENT_GUIDANCE_END, SUBAGENT_GUIDANCE_START } from "../../src/runs/shared/subagent-guidance.ts";
 
 const envSnapshot = {
 	PI_SUBAGENT_INHERIT_PROJECT_CONTEXT: process.env.PI_SUBAGENT_INHERIT_PROJECT_CONTEXT,
@@ -108,6 +110,17 @@ describe("subagent prompt runtime", () => {
 
 		assert.ok(!rewritten.includes("Do not keep this"));
 		assert.ok(rewritten.includes("<skill name=\"safe-bash\">"));
+	});
+
+	it("strips parent-only subagent guidance blocks from child prompts", () => {
+		const prompt = `Before\n\n${SUBAGENT_GUIDANCE_START}\n## Subagent-driven development\nAvailable subagents:\n- worker — Writes code\n${SUBAGENT_GUIDANCE_END}\n\nAfter`;
+		const stripped = stripSubagentGuidanceBlock(prompt);
+		const rewritten = rewriteSubagentPrompt(prompt, { inheritProjectContext: true, inheritSkills: true });
+
+		assert.equal(stripped, "Before\n\nAfter");
+		assert.ok(!rewritten.includes("Subagent-driven development"));
+		assert.ok(rewritten.includes("Before"));
+		assert.ok(rewritten.includes("After"));
 	});
 
 	it("strips parent-only subagent custom messages from forked child context", () => {

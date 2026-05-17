@@ -41,8 +41,6 @@ Packaged prompt shortcuts are recipes the parent can apply directly with tools: 
 
 ## Core launch patterns
 
-Check availability with `subagent({ action: "list" })` when agent/chain names, scope, or custom management state are uncertain; always do it before custom/management workflows.
-
 Single advisory run:
 
 ```typescript

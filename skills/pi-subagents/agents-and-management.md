@@ -38,7 +38,7 @@ Precedence by parsed runtime name:
 2. user scope
 3. builtin agents
 
-Run `subagent({ action: "list" })` when names, scope, or availability are uncertain.
+Use management actions for debugging, inspection, and persistent agent definition changes.
 
 ## Persistent overrides
 
