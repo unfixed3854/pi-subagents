@@ -393,8 +393,8 @@ describe("single sync execution", { skip: !available ? "pi packages not availabl
 				message: {
 					role: "assistant",
 					content: [{ type: "text", text: "temporary provider failure" }],
-					model: "openai/gpt-5-mini",
-					errorMessage: "rate limit exceeded",
+					model: "zai/glm-5.1",
+					errorMessage: "RESOURCE_EXHAUSTED: ZAI balance not enough",
 					usage: { input: 10, output: 5, cacheRead: 0, cacheWrite: 0, cost: { total: 0.01 } },
 				},
 			}],
@@ -402,8 +402,8 @@ describe("single sync execution", { skip: !available ? "pi packages not availabl
 		});
 		mockPi.onCall({ output: "Recovered on fallback" });
 		const agents = [makeAgent("echo", {
-			model: "openai/gpt-5-mini",
-			fallbackModels: ["anthropic/claude-sonnet-4"],
+			model: "zai/glm-5.1",
+			fallbackModels: ["openai/gpt-5-mini"],
 		})];
 
 		const result = await runSync(tempDir, agents, "echo", "Task", {
@@ -411,8 +411,8 @@ describe("single sync execution", { skip: !available ? "pi packages not availabl
 		});
 
 		assert.equal(result.exitCode, 0);
-		assert.equal(result.model, "anthropic/claude-sonnet-4");
-		assert.deepEqual(result.attemptedModels, ["openai/gpt-5-mini", "anthropic/claude-sonnet-4"]);
+		assert.equal(result.model, "openai/gpt-5-mini");
+		assert.deepEqual(result.attemptedModels, ["zai/glm-5.1", "openai/gpt-5-mini"]);
 		assert.equal(result.modelAttempts?.length, 2);
 		assert.equal(result.modelAttempts?.[0]?.success, false);
 		assert.equal(result.modelAttempts?.[1]?.success, true);

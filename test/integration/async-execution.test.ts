@@ -436,8 +436,8 @@ describe("async execution utilities", { skip: !available ? "pi packages not avai
 				message: {
 					role: "assistant",
 					content: [{ type: "text", text: "primary failed" }],
-					model: "openai/gpt-5-mini",
-					errorMessage: "rate limit exceeded",
+					model: "zai/glm-5.1",
+					errorMessage: "Provider returned error: free-tier tokens exhausted",
 					usage: { input: 10, output: 5, cacheRead: 0, cacheWrite: 0, cost: { total: 0.01 } },
 				},
 			}],
@@ -452,8 +452,8 @@ describe("async execution utilities", { skip: !available ? "pi packages not avai
 			agent: "worker",
 			task: "Do work",
 			agentConfig: makeAgent("worker", {
-				model: "openai/gpt-5-mini:high",
-				fallbackModels: ["anthropic/claude-sonnet-4:low"],
+				model: "zai/glm-5.1:high",
+				fallbackModels: ["openai/gpt-5-mini:low"],
 			}),
 			ctx: { pi: { events: { emit() {} } }, cwd: tempDir, currentSessionId: "session-1" },
 			availableModels: [
@@ -485,11 +485,11 @@ describe("async execution utilities", { skip: !available ? "pi packages not avai
 
 		const payload = JSON.parse(fs.readFileSync(resultPath, "utf-8"));
 		assert.equal(payload.success, true);
-		assert.equal(payload.results[0].model, "anthropic/claude-sonnet-4:low");
-		assert.deepEqual(payload.results[0].attemptedModels, ["openai/gpt-5-mini:high", "anthropic/claude-sonnet-4:low"]);
+		assert.equal(payload.results[0].model, "openai/gpt-5-mini:low");
+		assert.deepEqual(payload.results[0].attemptedModels, ["zai/glm-5.1:high", "openai/gpt-5-mini:low"]);
 		assert.equal(payload.results[0].modelAttempts.length, 2);
 		const statusPayload = JSON.parse(fs.readFileSync(path.join(asyncDir, "status.json"), "utf-8")) as AsyncStatusPayload;
-		assert.equal(statusPayload.steps[0]?.model, "anthropic/claude-sonnet-4:low");
+		assert.equal(statusPayload.steps[0]?.model, "openai/gpt-5-mini:low");
 		assert.equal(statusPayload.steps[0]?.thinking, "low");
 		assert.ok(statusPayload.totalTokens!.total > 0);
 		assert.ok(statusPayload.steps[0]?.tokens!.total > 0);
