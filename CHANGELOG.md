@@ -12,6 +12,10 @@
 ## [Unreleased]
 
 ### Added
+- Added the bundled pi-subagents `brainstorming` skill, adapted from Obra's Superpowers brainstorming workflow, for context-builder-backed clarification, oracle approach comparison, approval-gated design, reviewer-checked specs written to `docs/specs/YYYY-MM-DD-<topic>-design.md`, and planner handoff.
+
+### Removed
+- Removed the `/gather-context-and-clarify` prompt template; use the `brainstorming` skill for approved design/spec workflows.
 
 ### Fixed
 

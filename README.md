@@ -177,7 +177,7 @@ Use orchestration as parent-agent guidance, not as a runtime workflow mode. For 
 clarify → planner → worker → fresh reviewers → worker
 ```
 
-Use the optional prompt shortcuts below when you want the pattern to be repeatable.
+Use the optional prompt shortcuts below when you want the pattern to be repeatable. Use the bundled `brainstorming` skill when a rough idea should become an approved design/spec before implementation planning.
 
 Packaged `planner`, `worker`, and `oracle` default to forked context when a launch omits `context`; pass `context: "fresh"` when you intentionally want a fresh child run.
 
@@ -194,7 +194,6 @@ The package includes reusable prompt templates for common workflows. You do not 
 | `/parallel-research` | Combine `researcher` and `scout` for external evidence, local code context, and practical tradeoffs. |
 | `/parallel-context-build` | Run `context-builder` agents in parallel to produce planning handoff context and meta-prompts. |
 | `/parallel-handoff-plan` | Combine external research and `context-builder` passes into an implementation handoff plan and meta-prompt. |
-| `/gather-context-and-clarify` | Scout/research first, then ask the user the clarification questions that matter. |
 | `/parallel-cleanup` | Run review-only cleanup passes after implementation. |
 
 Add `autofix` to `/parallel-review` or `/parallel-cleanup` to apply only the synthesized fixes worth doing now after reviewers return.
@@ -585,17 +584,20 @@ Missing skills do not fail execution. The result summary shows a warning.
 
 ### Bundled skill
 
-The package bundles a `pi-subagents` skill that is automatically available to the parent agent when the extension is installed. It is for the orchestrating parent only: child subagents never receive it, and their context is explicitly filtered to strip parent-only orchestration instructions.
+The package bundles `pi-subagents` and `brainstorming` skills that are automatically available to the parent agent when the extension is installed. They are for the orchestrating parent only: child subagents never receive parent orchestration skills, and their context is explicitly filtered to strip parent-only orchestration instructions.
 
 What the bundled skill covers:
 - **Delegation patterns**: when to launch which agent, whether to use single, parallel, chain, or async mode, and whether to use fresh or forked context
-- **Prompt workflow recipes**: how to apply the packaged techniques directly with `subagent(...)` when the user describes the workflow in natural language instead of invoking a slash command. This includes parallel review, review-loop, parallel research, parallel context-build, parallel handoff-plan, gather-context-and-clarify, and parallel cleanup
+- **Prompt workflow recipes**: how to apply the packaged techniques directly with `subagent(...)` when the user describes the workflow in natural language instead of invoking a slash command. This includes parallel review, review-loop, parallel research, parallel context-build, parallel handoff-plan, and parallel cleanup
+- **Brainstorming workflow**: the pi-subagents `brainstorming` skill is adapted from Obra's Superpowers workflow; it starts with `context-builder`, asks with `ask_user` one question at a time, uses `oracle` for 2-3 approaches, gates on design approval, writes specs to `docs/specs/YYYY-MM-DD-<topic>-design.md`, reviews with `reviewer`, and launches `planner` after user approval
 - **Role-agent prompting guidance**: compact contract prompts instead of long scripts, what to include in role-specific meta prompts, and retrieval budgets for researchers
 - **Safety boundaries**: child agents must not run subagents, must not invent intercom targets, and must escalate unapproved decisions
 - **Intercom conventions**: when to ask vs send, and how parent-side result delivery works with `pi-intercom`
 - **Control and diagnostics**: attention signals, soft interrupts, status, and the `doctor` action
 
-If you are writing an agent that orchestrates subagents, the bundled skill helps it behave correctly without guessing the patterns. If you are a human user, you do not need to read it directly; the README and prompt shortcuts encode the same workflows in user-facing form.
+If you are writing an agent that orchestrates subagents, the bundled skills help it behave correctly without guessing the patterns. If you are a human user, you do not need to read them directly; the README, prompt shortcuts, and natural-language skill use encode the same workflows in user-facing form.
+
+Credit: the bundled `brainstorming` skill is adapted from Jesse Vincent / Obra's Superpowers project, MIT licensed: https://github.com/obra/superpowers/tree/main/skills/brainstorming. Original copyright © 2025 Jesse Vincent.
 
 ## Programmatic tool usage
 
@@ -952,7 +954,7 @@ The result watcher emits `subagent:async-complete`; `src/extension/index.ts` reg
 
 ## Prompt-template integration
 
-`pi-subagents` works standalone through natural language, the `subagent` tool, slash commands, and the packaged prompt shortcuts listed near the top of this README. If you use [pi-prompt-template-model](https://github.com/nicobailon/pi-prompt-template-model), you can also wrap subagent delegation in your own reusable prompt templates.
+`pi-subagents` works standalone through natural language, the `subagent` tool, slash commands, bundled skills, and the packaged prompt shortcuts listed near the top of this README. If you use [pi-prompt-template-model](https://github.com/nicobailon/pi-prompt-template-model), you can also wrap subagent delegation in your own reusable prompt templates.
 
 Example:
 

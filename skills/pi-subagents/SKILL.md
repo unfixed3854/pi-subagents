@@ -17,7 +17,7 @@ Use when the parent needs to launch specialized subagents, compose multiple agen
 ## Read extra reference when needed
 
 - Full execution examples: [running-subagents.md](running-subagents.md)
-- Prompt-template mappings and long playbooks: [orchestration-recipes.md](orchestration-recipes.md)
+- Prompt-template mappings, brainstorming skill workflow, and long playbooks: [orchestration-recipes.md](orchestration-recipes.md)
 - Builtins, discovery, overrides, and agent authoring: [agents-and-management.md](agents-and-management.md)
 - Parent/child intercom coordination: [intercom.md](intercom.md)
 - Error catalog and diagnostics: [troubleshooting.md](troubleshooting.md)
@@ -26,7 +26,7 @@ Use when the parent needs to launch specialized subagents, compose multiple agen
 
 - Advisory review: fresh-context `reviewer` for adversarial diff/plan review; forked `oracle` for inherited decisions and drift.
 - Implementation handoff: have `oracle` advise when useful, then `worker` implements only approved direction.
-- Recon and planning: use `scout` or `context-builder`, then `planner` for non-trivial plans.
+- Recon and planning: use `scout` for fast local mapping or `context-builder` for stronger handoff context, then `planner` for non-trivial plans. Brainstorming workflows always start with `context-builder`.
 - Parallel exploration: run independent read/review/research tasks concurrently.
 - Long-running work: launch async/background runs and inspect or resume later.
 - Agent authoring: create, update, override, or delete agents/chains.
@@ -37,7 +37,7 @@ Do not delegate tiny tasks that are faster to do directly. Do not use subagents 
 
 Agents should use the `subagent(...)` tool for execution, management, status, and control. Humans often use `/run`, `/chain`, `/parallel`, `/run-chain`, and `/subagents-doctor`.
 
-Packaged prompt shortcuts are recipes the parent can apply directly with tools: `/parallel-review`, `/review-loop`, `/parallel-research`, `/parallel-context-build`, `/parallel-handoff-plan`, `/gather-context-and-clarify`, and `/parallel-cleanup`. See [orchestration-recipes.md](orchestration-recipes.md).
+Packaged prompt shortcuts are recipes the parent can apply directly with tools: `/parallel-review`, `/review-loop`, `/parallel-research`, `/parallel-context-build`, `/parallel-handoff-plan`, and `/parallel-cleanup`. The bundled pi-subagents `brainstorming` skill handles context-builder-backed design/spec workflows. See [orchestration-recipes.md](orchestration-recipes.md).
 
 ## Core launch patterns
 

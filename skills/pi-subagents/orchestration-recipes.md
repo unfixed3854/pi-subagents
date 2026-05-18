@@ -4,7 +4,6 @@ Prompt templates in `prompts/` are reusable recipes. When a user provides a URL,
 
 ## Prompt shortcut mapping
 
-- `/gather-context-and-clarify`: launch `scout` and sometimes `researcher`; synthesize; ask unresolved clarification questions.
 - `/parallel-review`: launch fresh-context `reviewer` agents with distinct angles; synthesize before applying fixes.
 - `/review-loop`: parent runs worker → fresh reviewers → synthesized fix worker until clean or capped.
 - `/parallel-research`: combine local `scout` context with external `researcher` evidence.
@@ -78,9 +77,20 @@ subagent({
 
 Final handoff should include approach, likely files, constraints, non-goals, validation, risks, unresolved questions, and compact implementation-ready meta-prompt.
 
-## Gather context and clarify
+## Brainstorming skill
 
-Start non-trivial work by launching `scout` for local context and `researcher` only when external evidence matters. Ask children for concise findings and remaining clarification questions. Then synthesize and ask the user only the unresolved questions needed for shared understanding before planning or implementation.
+Use the bundled pi-subagents `brainstorming` skill when a rough request needs context-backed design before implementation planning.
+
+Rules:
+
+- Always start with `context-builder`; do not make the user choose between `scout` and `context-builder`.
+- Ask clarifying questions with `ask_user`, one question at a time, preferably with multiple-choice options.
+- Launch `oracle` to propose 2–3 approaches with trade-offs and a recommendation.
+- Get explicit design approval before writing implementation plans or code.
+- Write the approved spec to `docs/specs/YYYY-MM-DD-<topic>-design.md`.
+- Launch `reviewer` to review the written spec; parent applies accepted fixes.
+- After user approval of the reviewed spec, launch `planner`.
+- Do not launch `worker` or implement from the brainstorming skill.
 
 ## Parallel cleanup
 
