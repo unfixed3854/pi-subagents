@@ -597,7 +597,7 @@ What the bundled skill covers:
 
 If you are writing an agent that orchestrates subagents, the bundled skills help it behave correctly without guessing the patterns. If you are a human user, you do not need to read them directly; the README, prompt shortcuts, and natural-language skill use encode the same workflows in user-facing form.
 
-Credit: the bundled `brainstorming` skill is adapted from Jesse Vincent / Obra's Superpowers project, MIT licensed: https://github.com/obra/superpowers/tree/main/skills/brainstorming. Original copyright © 2025 Jesse Vincent.
+Credit: the bundled `brainstorming` skill and packaged `planner` agent are adapted from Jesse Vincent / Obra's Superpowers project, MIT licensed: https://github.com/obra/superpowers/tree/main/skills/brainstorming and https://github.com/obra/superpowers/tree/main/skills/writing-plans. Original copyright © 2025 Jesse Vincent.
 
 ## Programmatic tool usage
 
