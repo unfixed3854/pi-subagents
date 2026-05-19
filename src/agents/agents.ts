@@ -86,7 +86,7 @@ export interface AgentConfig {
 	filePath: string;
 	skills?: string[];
 	extensions?: string[];
-	output?: string;
+	output?: string | false;
 	defaultReads?: string[];
 	defaultProgress?: boolean;
 	interactive?: boolean;
@@ -615,6 +615,7 @@ function loadAgentsFromDir(dir: string, source: AgentSource): AgentConfig[] {
 			: frontmatter.defaultContext === "fresh"
 				? "fresh" as const
 				: undefined;
+		const output = frontmatter.output === "false" ? false : frontmatter.output;
 
 		let extensions: string[] | undefined;
 		if (frontmatter.extensions !== undefined) {
@@ -650,7 +651,7 @@ function loadAgentsFromDir(dir: string, source: AgentSource): AgentConfig[] {
 			filePath,
 			skills: skills && skills.length > 0 ? skills : undefined,
 			extensions,
-			output: frontmatter.output,
+			output,
 			defaultReads: defaultReads && defaultReads.length > 0 ? defaultReads : undefined,
 			defaultProgress: frontmatter.defaultProgress === "true",
 			interactive: frontmatter.interactive === "true",

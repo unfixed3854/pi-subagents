@@ -276,7 +276,8 @@ function applyAgentConfig(target: AgentConfig, cfg: Record<string, unknown>): st
 		else return "config.defaultContext must be 'fresh', 'fork', or false when provided.";
 	}
 	if (hasKey(cfg, "output")) {
-		if (cfg.output === false || cfg.output === "") target.output = undefined;
+		if (cfg.output === false) target.output = false;
+		else if (cfg.output === "") target.output = undefined;
 		else if (typeof cfg.output === "string") target.output = cfg.output;
 		else return "config.output must be a string or false when provided.";
 	}

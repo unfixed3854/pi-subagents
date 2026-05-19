@@ -44,6 +44,10 @@ describe("resolveSingleOutputPath", () => {
 		const resolved = resolveSingleOutputPath("reviews/report.md", "/runtime", "nested/work");
 		assert.equal(resolved, path.resolve("/runtime", "nested/work", "reviews/report.md"));
 	});
+
+	it("treats string false from agent frontmatter as disabled output", () => {
+		assert.equal(resolveSingleOutputPath("false", "/runtime"), undefined);
+	});
 });
 
 describe("injectSingleOutputInstruction", () => {

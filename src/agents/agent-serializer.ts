@@ -59,7 +59,8 @@ export function serializeAgent(config: AgentConfig): string {
 		lines.push(`extensions: ${extensionsValue ?? ""}`);
 	}
 
-	if (config.output) lines.push(`output: ${config.output}`);
+	if (config.output === false) lines.push("output: false");
+	else if (config.output) lines.push(`output: ${config.output}`);
 
 	const readsValue = joinComma(config.defaultReads);
 	if (readsValue) lines.push(`defaultReads: ${readsValue}`);

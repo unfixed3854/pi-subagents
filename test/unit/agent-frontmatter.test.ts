@@ -66,6 +66,44 @@ Do work
 	});
 });
 
+describe("agent frontmatter output", () => {
+	it("serializes explicit false output into agent frontmatter", () => {
+		const agent: AgentConfig = {
+			name: "reviewer",
+			description: "Reviewer",
+			systemPrompt: "Review code",
+			systemPromptMode: "replace",
+			inheritProjectContext: false,
+			inheritSkills: false,
+			source: "project",
+			filePath: "/tmp/reviewer.md",
+			output: false,
+		};
+
+		const serialized = serializeAgent(agent);
+		assert.match(serialized, /^output: false$/m);
+	});
+
+	it("parses output false from discovered agent frontmatter as boolean false", () => {
+		const dir = fs.mkdtempSync(path.join(os.tmpdir(), "pi-subagents-agent-output-false-"));
+		tempDirs.push(dir);
+		const agentsDir = path.join(dir, ".pi", "agents");
+		fs.mkdirSync(agentsDir, { recursive: true });
+		fs.writeFileSync(path.join(agentsDir, "reviewer.md"), `---
+name: reviewer
+description: Reviewer
+output: false
+---
+
+Review code
+`, "utf-8");
+
+		const result = discoverAgents(dir, "project");
+		const reviewer = result.agents.find((agent) => agent.name === "reviewer");
+		assert.equal(reviewer?.output, false);
+	});
+});
+
 describe("agent frontmatter maxSubagentDepth", () => {
 	it("serializes maxSubagentDepth into agent frontmatter", () => {
 		const agent: AgentConfig = {

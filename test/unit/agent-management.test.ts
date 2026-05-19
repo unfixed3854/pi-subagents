@@ -129,6 +129,18 @@ Inspect
 		assert.doesNotMatch(content, /^package:/m);
 	});
 
+	it("persists config output false as disabled output", () => {
+		const ctx = { cwd: tempDir, modelRegistry: { getAvailable: () => [] } };
+		const created = handleCreate(
+			{ config: { name: "reviewer", description: "Reviewer", scope: "project", output: false } },
+			ctx,
+		);
+
+		assert.equal(created.isError, false);
+		const filePath = path.join(tempDir, ".pi", "agents", "reviewer.md");
+		assert.match(fs.readFileSync(filePath, "utf-8"), /^output: false$/m);
+	});
+
 	it("creates delegate with its builtin prompt defaults", () => {
 		const result = handleCreate(
 			{ config: { name: "delegate", description: "Delegate helper", scope: "project" } },
