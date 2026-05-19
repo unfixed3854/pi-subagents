@@ -18,16 +18,35 @@ function agent(name: string, source: AgentConfig["source"], description = `${nam
 }
 
 describe("subagent guidance", () => {
-	it("builds a marked guidance block with agent bullets", () => {
+	it("builds a marked guidance block with parent workflow protocol and agent bullets", () => {
 		const block = buildSubagentGuidanceBlock([agent("worker", "builtin", "Writes code"), agent("custom", "project", "Custom help")]);
 		assert.ok(block.startsWith(SUBAGENT_GUIDANCE_START));
 		assert.ok(block.endsWith(SUBAGENT_GUIDANCE_END));
-		assert.ok(block.includes("Use focused parent skills before acting"));
-		assert.ok(block.includes("brainstorming"));
-		assert.ok(block.includes("writing-plans"));
-		assert.ok(block.includes("systematic-debugging"));
-		assert.ok(block.includes("verification-before-completion"));
-		assert.ok(block.includes("Child subagents must not run orchestration workflows"));
+		assert.ok(block.includes("Parent workflow protocol"));
+		assert.ok(block.includes("Parent owns task routing, decisions, synthesis, and final user response."));
+		for (const skill of [
+			"brainstorming",
+			"writing-plans",
+			"executing-plans",
+			"systematic-debugging",
+			"test-driven-development",
+			"requesting-code-review",
+			"verification-before-completion",
+		]) {
+			assert.ok(block.includes(skill), `expected guidance to mention ${skill}`);
+		}
+		assert.match(block, /bugs, test failures, or unexpected behavior: no direct fix/i);
+		assert.match(block, /launch `scout` or `context-builder` before fix\/worker/i);
+		assert.match(block, /new behavior or features: no direct implementation/i);
+		assert.match(block, /consult `oracle` when design tradeoffs exist/i);
+		assert.match(block, /approval before implementation/i);
+		assert.match(block, /use `worker` for scoped edits and `reviewer` for meaningful changes/i);
+		assert.match(block, /Direct action is only for read-only answers, formatting\/typo-only edits, or single-file mechanical non-behavioral changes/i);
+		assert.match(block, /does not apply to bugs, test failures, unexpected behavior, feature work, or completion claims/i);
+		assert.match(block, /subagent launch or model failure permits fallback/i);
+		assert.match(block, /disclose skipped or reduced workflow/i);
+		assert.match(block, /prompt-level guidance only; no runtime enforcement is guaranteed/i);
+		assert.ok(block.includes("Child subagents must not run orchestration workflows or launch more subagents unless explicitly authorized by the parent."));
 		assert.ok(block.includes("- worker — Writes code"));
 		assert.ok(block.includes("- custom — Custom help"));
 		assert.ok(!block.includes("Do not call a list"));

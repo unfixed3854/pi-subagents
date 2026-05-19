@@ -113,12 +113,25 @@ describe("subagent prompt runtime", () => {
 	});
 
 	it("strips parent-only subagent guidance blocks from child prompts", () => {
-		const prompt = `Before\n\n${SUBAGENT_GUIDANCE_START}\n## Subagent-driven development\nAvailable subagents:\n- worker — Writes code\n${SUBAGENT_GUIDANCE_END}\n\nAfter`;
+		const prompt = `Before\n\n${SUBAGENT_GUIDANCE_START}
+## Subagent-driven development
+
+### Parent workflow protocol
+- Parent owns task routing, decisions, synthesis, and final user response.
+- Bugs, test failures, or unexpected behavior: no direct fix; launch \`scout\` or \`context-builder\` before fix/worker.
+- Child subagents must not run orchestration workflows or launch more subagents unless explicitly authorized by the parent.
+
+Available subagents:
+- worker — Writes code
+${SUBAGENT_GUIDANCE_END}\n\nAfter`;
 		const stripped = stripSubagentGuidanceBlock(prompt);
 		const rewritten = rewriteSubagentPrompt(prompt, { inheritProjectContext: true, inheritSkills: true });
 
 		assert.equal(stripped, "Before\n\nAfter");
 		assert.ok(!rewritten.includes("Subagent-driven development"));
+		assert.ok(!rewritten.includes("Parent workflow protocol"));
+		assert.ok(!rewritten.includes("no direct fix"));
+		assert.ok(!rewritten.includes("launch `scout` or `context-builder`"));
 		assert.ok(rewritten.includes("Before"));
 		assert.ok(rewritten.includes("After"));
 	});
