@@ -22,7 +22,12 @@ describe("subagent guidance", () => {
 		const block = buildSubagentGuidanceBlock([agent("worker", "builtin", "Writes code"), agent("custom", "project", "Custom help")]);
 		assert.ok(block.startsWith(SUBAGENT_GUIDANCE_START));
 		assert.ok(block.endsWith(SUBAGENT_GUIDANCE_END));
-		assert.ok(block.includes("Use subagent-driven workflows for all non-trivial tasks"));
+		assert.ok(block.includes("Use focused parent skills before acting"));
+		assert.ok(block.includes("brainstorming"));
+		assert.ok(block.includes("writing-plans"));
+		assert.ok(block.includes("systematic-debugging"));
+		assert.ok(block.includes("verification-before-completion"));
+		assert.ok(block.includes("Child subagents must not run orchestration workflows"));
 		assert.ok(block.includes("- worker — Writes code"));
 		assert.ok(block.includes("- custom — Custom help"));
 		assert.ok(!block.includes("Do not call a list"));

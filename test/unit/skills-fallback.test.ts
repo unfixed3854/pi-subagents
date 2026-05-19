@@ -78,17 +78,17 @@ describe("skills filesystem fallback", () => {
 		assert.match(resolved[0]?.content ?? "", /Run local fallback checks\./);
 	});
 
-	it("does not expose pi-subagents as a child-injectable skill", () => {
-		makeProjectSkill(tempDir, "pi-subagents", "Parent orchestration only.");
-		makeProjectSkill(tempDir, "safe-bash", "Use safe bash.");
+	it("discovers focused workflow skills normally", () => {
+		makeProjectSkill(tempDir, "subagent-orchestration", "Parent orchestration support.");
+		makeProjectSkill(tempDir, "quality-gates", "Use evidence gates.");
 
 		const available = discoverAvailableSkills(tempDir).map((skill) => skill.name);
-		assert.equal(available.includes("pi-subagents"), false);
-		assert.equal(available.includes("safe-bash"), true);
+		assert.equal(available.includes("subagent-orchestration"), true);
+		assert.equal(available.includes("quality-gates"), true);
 
-		const { resolved, missing } = resolveSkills(["pi-subagents", "safe-bash"], tempDir);
-		assert.deepEqual(missing, ["pi-subagents"]);
-		assert.deepEqual(resolved.map((skill) => skill.name), ["safe-bash"]);
+		const { resolved, missing } = resolveSkills(["subagent-orchestration", "quality-gates"], tempDir);
+		assert.deepEqual(missing, []);
+		assert.deepEqual(resolved.map((skill) => skill.name).sort(), ["quality-gates", "subagent-orchestration"]);
 	});
 
 	it("classifies package-provided skills as project-package", () => {

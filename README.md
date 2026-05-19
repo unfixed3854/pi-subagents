@@ -177,11 +177,32 @@ Use orchestration as parent-agent guidance, not as a runtime workflow mode. For 
 clarify → planner → worker → fresh reviewers → worker
 ```
 
-Use the optional prompt shortcuts below when you want the pattern to be repeatable. Use the bundled `brainstorming` skill when a rough idea should become an approved design/spec before implementation planning.
+Use the optional prompt shortcuts below when you want the pattern to be repeatable. Focused parent skills are the primary workflow surface; subagents are the execution primitives. Use `brainstorming` when a rough idea should become an approved design/spec before implementation planning.
 
 Packaged `planner`, `worker`, and `oracle` default to forked context when a launch omits `context`; pass `context: "fresh"` when you intentionally want a fresh child run.
 
-Child-safety boundaries are enforced at runtime. Spawned child sessions do not register the `subagent` tool, do not receive the bundled `pi-subagents` skill, and receive explicit boundary instructions that they are not the parent orchestrator and must not propose or run subagents. Forked child context filtering also removes parent-only subagent artifacts (including old hidden orchestration-instruction messages, slash/status/control messages, and prior parent `subagent` tool-call/tool-result history) while preserving ordinary prose and unrelated tool calls/results.
+Child-safety boundaries are enforced at runtime. Spawned child sessions do not register the `subagent` tool, do not receive parent orchestration skills, and receive explicit boundary instructions that they are not the parent orchestrator and must not propose or run subagents. Forked child context filtering also removes parent-only subagent artifacts (including old hidden orchestration-instruction messages, slash/status/control messages, and prior parent `subagent` tool-call/tool-result history) while preserving ordinary prose and unrelated tool calls/results.
+
+The old umbrella `pi-subagents` skill has been replaced by focused workflow skills plus support skills.
+
+| Skill | Use when | Primary subagents |
+|-------|----------|-------------------|
+| `brainstorming` | Turning an idea into an approved design/spec | `context-builder`, `oracle`, `reviewer`, `planner` |
+| `writing-plans` | Turning approved requirements into an implementation plan | `context-builder`, `planner`, `reviewer` |
+| `executing-plans` | Running an approved plan task-by-task | `worker`, `reviewer` |
+| `subagent-driven-development` | Delegating implementation with review loops | `worker`, `reviewer`, `oracle` |
+| `dispatching-parallel-agents` | Running independent read/research/review tasks | `scout`, `researcher`, `context-builder`, `reviewer` |
+| `requesting-code-review` | Reviewing meaningful changes before completion | `reviewer`, `worker` |
+| `receiving-code-review` | Triaging and applying review feedback | `reviewer`, `worker`, `oracle` |
+| `systematic-debugging` | Fixing bugs or test failures from evidence | `scout`, `context-builder`, `worker`, `reviewer` |
+| `test-driven-development` | Implementing behavior test-first | `worker`, `reviewer` |
+| `verification-before-completion` | Making completion claims with evidence | `reviewer`, `worker` |
+| `using-git-worktrees` | Isolating branch work or parallel writers | `worker`, `reviewer` |
+| `finishing-a-development-branch` | Choosing merge/PR/cleanup after validation | `reviewer`, `worker` |
+| `writing-skills` | Creating or changing skills | `context-builder`, `worker`, `reviewer` |
+| `using-pi-superpowers` | Routing requests to focused workflow skills | all workflow agents |
+| `subagent-orchestration` | Defining parent/child launch contracts | all delegated agents |
+| `quality-gates` | Enforcing TDD, review, verification, completion evidence | `worker`, `reviewer` |
 
 ## Optional shortcuts
 
@@ -582,22 +603,21 @@ Injected skills use this shape:
 
 Missing skills do not fail execution. The result summary shows a warning.
 
-### Bundled skill
+### Bundled skills
 
-The package bundles `pi-subagents` and `brainstorming` skills that are automatically available to the parent agent when the extension is installed. They are for the orchestrating parent only: child subagents never receive parent orchestration skills, and their context is explicitly filtered to strip parent-only orchestration instructions.
+The package bundles focused workflow skills that are automatically available to the parent agent when the extension is installed. They are for the orchestrating parent only: child subagents never receive parent orchestration skills, and their context is explicitly filtered to strip parent-only orchestration instructions.
 
-What the bundled skill covers:
-- **Delegation patterns**: when to launch which agent, whether to use single, parallel, chain, or async mode, and whether to use fresh or forked context
-- **Prompt workflow recipes**: how to apply the packaged techniques directly with `subagent(...)` when the user describes the workflow in natural language instead of invoking a slash command. This includes parallel review, review-loop, parallel research, parallel context-build, parallel handoff-plan, and parallel cleanup
-- **Brainstorming workflow**: the pi-subagents `brainstorming` skill is adapted from Obra's Superpowers workflow; it starts with `context-builder`, asks with `ask_user` one question at a time, uses `oracle` for 2-3 approaches, gates on design approval, writes specs to `docs/specs/YYYY-MM-DD-<topic>-design.md`, reviews with `reviewer`, and launches `planner` after user approval
-- **Role-agent prompting guidance**: compact contract prompts instead of long scripts, what to include in role-specific meta prompts, and retrieval budgets for researchers
+What the bundled skills cover:
+- **Focused Superpowers workflows**: brainstorming, planning, executing plans, debugging, TDD, review, verification, worktrees, branch finishing, and skill authoring
+- **Support skills**: `subagent-orchestration` for launch contracts and parent/child boundaries, and `quality-gates` for TDD, review, verification, and completion evidence
+- **Prompt workflow recipes**: how to apply packaged techniques directly with `subagent(...)` when the user describes the workflow in natural language instead of invoking a slash command
+- **Brainstorming workflow**: `brainstorming` starts with `context-builder`, asks with `ask_user` one question at a time, uses `oracle` for 2-3 approaches, gates on design approval, writes specs, reviews with `reviewer`, and launches `planner` after user approval
 - **Safety boundaries**: child agents must not run subagents, must not invent intercom targets, and must escalate unapproved decisions
-- **Intercom conventions**: when to ask vs send, and how parent-side result delivery works with `pi-intercom`
 - **Control and diagnostics**: attention signals, soft interrupts, status, and the `doctor` action
 
-If you are writing an agent that orchestrates subagents, the bundled skills help it behave correctly without guessing the patterns. If you are a human user, you do not need to read them directly; the README, prompt shortcuts, and natural-language skill use encode the same workflows in user-facing form.
+If you are writing an agent that orchestrates subagents, the bundled skills help it pick the right focused workflow without guessing. If you are a human user, you do not need to read them directly; the README, prompt shortcuts, and natural-language skill use encode the same workflows in user-facing form.
 
-Credit: the bundled `brainstorming` skill and packaged `planner` agent are adapted from Jesse Vincent / Obra's Superpowers project, MIT licensed: https://github.com/obra/superpowers/tree/main/skills/brainstorming and https://github.com/obra/superpowers/tree/main/skills/writing-plans. Original copyright © 2025 Jesse Vincent.
+Credit: the bundled Superpowers-style skills and packaged `planner` agent are adapted from Jesse Vincent / Obra's Superpowers project, MIT licensed: https://github.com/obra/superpowers. Original copyright © 2025 Jesse Vincent.
 
 ## Programmatic tool usage
 
