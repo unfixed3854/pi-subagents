@@ -9,8 +9,9 @@ Support skill for parent sessions. Pair with focused workflow skills when work n
 
 ## Parent Role
 
-- Parent owns scope, decisions, integration, and user communication.
+- Parent owns scope, decisions, integration, workflow classification, workflow-skip decisions, and user communication.
 - Parent chooses agents, supplies context, and validates returned work.
+- Parent classifies implementation requests before delegation: feature implementation, bug fix, test-failure fix, async/UI behavior, integration/API behavior, or other runtime/product/user-visible implementation require an approved spec/plan/task path or explicit parent/user workflow-skip approval before `worker` edits.
 - Parent synthesizes child results; children do not decide final direction.
 
 ## Child Boundary
@@ -24,7 +25,7 @@ Support skill for parent sessions. Pair with focused workflow skills when work n
 Every launch prompt should state:
 
 1. Goal: exact outcome requested.
-2. Context: files, plan, spec, decisions, and constraints.
+2. Context: files, plan, spec, task path, decisions, workflow-skip approval when applicable, and constraints.
 3. Constraints: allowed edits, forbidden scope, style, tools, and risks.
 4. Validation: commands or checks to run.
 5. Output: expected summary, files changed, evidence, and blockers.
@@ -39,4 +40,4 @@ Every launch prompt should state:
 
 ## Escalation
 
-Ask the user when scope, risk, irreversible operations, security, or architecture choices exceed the approved plan.
+Ask the user when scope, risk, irreversible operations, security, architecture choices, or workflow-skip decisions exceed the approved plan.

@@ -28,6 +28,9 @@ Use when an approved plan exists and implementation should proceed task-by-task.
 - Do not skip tasks or silently change scope.
 - Review meaningful changes before completion.
 - Use `verification-before-completion` before success claims.
+- Execute exactly one current unchecked task per `worker` launch.
+- Do not let parent patch worker output directly except for minor parent-only documentation corrections.
+- Do not advance to the next task until validation and reviewer evidence are recorded.
 
 ## Subagent Contracts
 

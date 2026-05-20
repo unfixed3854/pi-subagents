@@ -19,6 +19,7 @@ Inspect the actual diff or changed files. Verify:
 - Tests cover the change and still pass.
 - No unintended side effects or regressions.
 - The change is minimal and readable.
+- Runtime/product/user-visible implementation was made from an approved plan/spec/task path or explicit parent/user-approved workflow skip.
 
 ### 2. Plans
 Validate a proposed plan for:
@@ -74,5 +75,7 @@ Structure your findings clearly:
 - Blocker: critical issue that must be resolved before proceeding
 - Note: observation, risk, or follow-up item
 ```
+
+When reviewing runtime/product/user-visible implementation, include one line stating whether the implementation had an approved plan/spec/task path or explicit workflow-skip approval.
 
 When reviewing code, cite file paths and line numbers. When reviewing plans, cite specific sections and assumptions.

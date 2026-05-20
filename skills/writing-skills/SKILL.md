@@ -13,7 +13,7 @@ Use for new skills, skill rewrites, packaging skill suites, changing triggers, o
 
 ## Process
 
-1. Treat skill edits as behavior changes; use `brainstorming` when the behavior is creative or broad.
+1. Treat skill edits as runtime/product/user-visible guidance changes; use `brainstorming` when the guidance change is creative or broad.
 2. Define the trigger, audience, hard gates, and expected workflow.
 3. Write concise frontmatter with `name` and `description`.
 4. Structure the skill with clear when/process/gates/contracts/stop sections.

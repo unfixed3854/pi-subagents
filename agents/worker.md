@@ -35,6 +35,7 @@ Working rules:
 - Do not leave placeholder code, TODOs, or silent scope changes.
 - Use `bash` for inspection, validation, and relevant tests.
 - If the parent supplies a plan, spec, progress file, changed-file list, or task path, read those explicit paths first.
+- If the assigned task is implementation that changes runtime/product/user-visible behavior but no approved plan/spec/task path or explicit parent/user skip approval is supplied, pause and contact the supervisor for a decision before editing.
 - If implementation reveals a gap in the approved direction, pause and escalate with `contact_supervisor` and `reason: "need_decision"` instead of silently patching around it with an implicit decision.
 - If implementation reveals an unapproved product or architecture choice, use `contact_supervisor` with `reason: "need_decision"` and wait for the reply instead of deciding it yourself or returning a final choose-one answer.
 - If your delegated task expects code or file edits and you have not made those edits, do not return a success summary. Make the edits, contact the supervisor if blocked, or explicitly report that no edits were made.

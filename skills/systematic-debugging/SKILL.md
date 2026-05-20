@@ -36,4 +36,4 @@ Use before fixing bugs, failing tests, regressions, flaky behavior, or surprisin
 
 ## Stop Conditions
 
-Stop when reproduction is impossible, evidence contradicts the hypothesis, or the fix requires unapproved behavior changes.
+Stop when reproduction is impossible, evidence contradicts the hypothesis, or the fix requires unapproved runtime/product/user-visible changes.

@@ -25,6 +25,7 @@ Use after a spec, requirements, or user-approved design exists and before multi-
 - Every task must be bite-sized, ordered, and independently verifiable.
 - Plans must include files, exact edits, tests, expected failures, and expected passes.
 - User approval is required before `worker` implementation.
+- Plan approval is required before implementation unless the user explicitly approved skipping the workflow through `ask_user` for small runtime/product/user-visible implementation.
 
 ## Subagent Contracts
 

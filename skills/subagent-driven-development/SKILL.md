@@ -13,11 +13,11 @@ Use for implementation plans, multi-file changes, or tasks that benefit from sep
 
 ## Process
 
-1. Classify the request: new behavior, approved implementation, bug, review, validation, or research.
+1. Classify the request: feature implementation, approved implementation, bug fix, test-failure fix, integration/API behavior, async/UI behavior, review, validation, or research.
 2. For approved implementation, provide `worker` the explicit plan/spec/progress path and only the current scoped task.
 3. Validate worker output and changed files before synthesizing progress.
 4. Launch `reviewer` for meaningful changes.
-5. Route accepted review fixes through `worker`; do not patch reviewer feedback directly unless it is a trivial parent-only documentation correction.
+5. Route accepted review fixes through `worker`; do not patch reviewer feedback directly unless it is a minor parent-only documentation correction.
 6. Commit at the task boundary when the plan includes a commit step and the user has not said otherwise.
 7. Continue to the next task only after validation and review evidence are complete.
 
@@ -26,6 +26,9 @@ Use for implementation plans, multi-file changes, or tasks that benefit from sep
 - Parent owns integration and final decisions.
 - No parallel writes in one worktree.
 - Review and verification are required before completion claims.
+- Parent routes, `worker` edits scoped tasks, and `reviewer` checks meaningful changes.
+- If no approved plan/spec/task path exists, do not launch implementation; route back to `brainstorming` or `writing-plans`.
+- Implementation that appears small but changes runtime/product/user-visible behavior still requires an approved plan/spec/task path unless the user explicitly approved skipping workflow.
 
 ## Subagent Contracts
 
