@@ -13,13 +13,15 @@ Use when an approved plan exists and implementation should proceed task-by-task.
 
 ## Process
 
-1. Read the full plan and identify the current task.
-2. Verify prerequisites, scope, and expected validation.
-3. Launch one `worker` with the current task, relevant context, constraints, and validation commands.
-4. Inspect worker results and run or verify requested checks.
-5. Launch `reviewer` for non-trivial changes.
-6. Send accepted fixes back through `worker`; re-review when fixes are substantial.
-7. Mark plan tasks complete only after evidence is available.
+1. Read the full plan path supplied by the user or planner and identify the current unchecked task.
+2. Verify prerequisites, scope, expected changed files, and validation commands for that task.
+3. Launch one `worker` for the current unchecked task only; include the plan path, task heading, constraints, and validation commands.
+4. Inspect worker results, changed files, and command output; run or verify requested checks.
+5. Launch `reviewer` for meaningful changes before moving to the next task.
+6. Send accepted reviewer fixes back through `worker`; re-review when fixes are substantial.
+7. Mark the task complete only after evidence is available.
+8. Commit at the task boundary when the plan includes a commit step and the user has not said otherwise.
+9. Repeat from step 1 for the next unchecked task.
 
 ## Required Gates
 
@@ -29,8 +31,8 @@ Use when an approved plan exists and implementation should proceed task-by-task.
 
 ## Subagent Contracts
 
-- `worker`: implement only the assigned task and report changed files, commands, and blockers.
-- `reviewer`: compare changes to plan, tests, edge cases, and simplicity.
+- `worker`: implement only the assigned current unchecked task and report changed files, commands, and blockers.
+- `reviewer`: compare changes to the plan task, tests, edge cases, and simplicity before the parent advances.
 
 ## Stop Conditions
 

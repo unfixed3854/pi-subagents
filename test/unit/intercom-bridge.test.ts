@@ -100,8 +100,10 @@ describe("diagnoseIntercomBridge", () => {
 				config: { mode: "always" },
 				context: "fresh",
 				orchestratorTarget: "main",
+				agentDir: tempDir,
 				extensionDir: path.join(tempDir, "missing-pi-intercom"),
 				configPath: path.join(tempDir, "config.json"),
+				globalNpmRoot: null,
 			});
 			assert.equal(diagnostic.active, false);
 			assert.equal(diagnostic.wantsIntercom, true);

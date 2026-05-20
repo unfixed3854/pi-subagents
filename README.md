@@ -67,7 +67,7 @@ Run parallel reviewers on this diff. I want one focused on correctness, one on t
 ```
 
 ```text
-Have worker implement this approved plan. Afterward, run parallel reviewers, summarize their feedback, and apply the fixes that make sense.
+Execute this approved plan task-by-task: run one worker for the current unchecked task, validate it, run reviewer for meaningful changes, route accepted fixes through worker, then advance.
 ```
 
 ```text
@@ -90,7 +90,7 @@ Those are ordinary Pi requests. Pi decides whether to call `subagent`, which age
 | Run parallel reviewers | “Run reviewers for correctness, tests, and cleanup.” |
 | Implement then review | “Implement this, then review it.” |
 | Review until clean | “Run a review loop on this change with a max of 3 rounds.” |
-| Execute a plan carefully | “Have worker implement this approved plan, then run reviewers and apply the feedback.” |
+| Execute a plan carefully | “Have worker implement the current unchecked task, validate it, run reviewer for meaningful changes, have worker apply fixes, then continue to the next task.” |
 | Scout before planning | “Use scout to inspect the auth flow before planning.” |
 | Run in the background | “Run this in the background.” |
 | Browse agents | “Show me the available subagents.” |
@@ -214,7 +214,6 @@ The package includes reusable prompt templates for common workflows. You do not 
 | `/review-loop` | Run parent-controlled worker, reviewer, and fix-worker cycles until clean or capped. |
 | `/parallel-research` | Combine `researcher` and `scout` for external evidence, local code context, and practical tradeoffs. |
 | `/parallel-context-build` | Run `context-builder` agents in parallel to produce planning handoff context and meta-prompts. |
-| `/parallel-handoff-plan` | Combine external research and `context-builder` passes into an implementation handoff plan and meta-prompt. |
 | `/parallel-cleanup` | Run review-only cleanup passes after implementation. |
 
 Add `autofix` to `/parallel-review` or `/parallel-cleanup` to apply only the synthesized fixes worth doing now after reviewers return.

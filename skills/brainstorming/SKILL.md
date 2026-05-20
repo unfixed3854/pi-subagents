@@ -13,15 +13,16 @@ Use before any behavior change, feature, component, architecture change, or ambi
 
 ## Process
 
-1. Launch `context-builder` to inspect files, docs, recent commits, patterns, constraints, tests, risks, and integration points.
-2. Ask clarifying questions with `ask_user`, one focused question at a time.
-3. Launch `oracle` with gathered context and answers; request 2-3 approaches, trade-offs, and a recommendation.
-4. Present the recommended design in sections scaled to complexity; get user approval.
-5. Write the approved spec to a path such as `docs/specs/2026-05-19-superpowers-migration-design.md`.
-6. Self-review for incomplete markers, contradictions, ambiguity, and scope creep.
-7. Launch `reviewer` to review the written spec; apply accepted fixes inline.
-8. Ask the user to review the spec file before planning.
-9. Launch `planner` with the approved spec.
+1. Launch `context-builder` for local context: inspect files, docs, recent commits, patterns, constraints, tests, risks, and integration points.
+2. Launch `researcher` when the request depends on external facts such as library behavior, APIs, documentation, standards, current best practices, external references, or recent ecosystem changes.
+3. Ask clarifying questions with `ask_user`, one focused question at a time, when required to choose scope or intent before design approval.
+4. Launch `oracle` with gathered local context, external research when used, and user answers; request 2-3 approaches, trade-offs, and a recommendation.
+5. Present the recommended design in sections scaled to complexity; get user approval.
+6. Write the approved spec to a path such as `docs/specs/2026-05-19-superpowers-migration-design.md`.
+7. Self-review for incomplete markers, contradictions, ambiguity, and scope creep.
+8. Launch `reviewer` to review the written spec; apply accepted fixes inline.
+9. Ask the user to review the spec file before planning.
+10. Launch `planner` with the approved spec path.
 
 ## Required Gates
 
@@ -31,10 +32,11 @@ Use before any behavior change, feature, component, architecture change, or ambi
 
 ## Subagent Contracts
 
-- `context-builder`: local context, constraints, tests, risks, open questions.
-- `oracle`: alternative approaches and recommendation; no edits.
-- `reviewer`: spec contradictions, ambiguity, missing validation, scope creep.
-- `planner`: implementation plan from the approved reviewed spec.
+- `context-builder`: local codebase context, constraints, integration points, and validation paths.
+- `researcher`: external/library/API/docs/standards/current-practice evidence with sources when external facts are needed.
+- `oracle`: design alternatives and recommendation based on gathered evidence.
+- `reviewer`: spec completeness, ambiguity, contradictions, and scope control.
+- `planner`: implementation plan from the approved spec path.
 
 ## Stop Conditions
 

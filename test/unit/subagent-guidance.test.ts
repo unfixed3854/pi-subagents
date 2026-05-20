@@ -41,6 +41,12 @@ describe("subagent guidance", () => {
 		assert.match(block, /consult `oracle` when design tradeoffs exist/i);
 		assert.match(block, /approval before implementation/i);
 		assert.match(block, /use `worker` for scoped edits and `reviewer` for meaningful changes/i);
+		assert.match(block, /planner writes full plans to `docs\/plans\/YYYY-MM-DD-<feature-name>\.md` and returns that saved path/i);
+		assert.match(block, /workers and reviewers read explicit plan, spec, progress, or diff paths supplied by the parent/i);
+		assert.doesNotMatch(block, /create or summarize to root `plan\.md`/i);
+		assert.doesNotMatch(block, /implicit root `plan\.md`/i);
+		assert.match(block, /execute one current unchecked plan task with one `worker`, validate it, review meaningful changes, route accepted fixes through `worker`, then advance/i);
+		assert.match(block, /brainstorming starts local context gathering and also starts `researcher` when external facts are needed/i);
 		assert.match(block, /Direct action is only for read-only answers, formatting\/typo-only edits, or single-file mechanical non-behavioral changes/i);
 		assert.match(block, /does not apply to bugs, test failures, unexpected behavior, feature work, or completion claims/i);
 		assert.match(block, /subagent launch or model failure permits fallback/i);

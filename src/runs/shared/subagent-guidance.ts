@@ -44,6 +44,12 @@ export function buildSubagentGuidanceBlock(agents: AgentConfig[]): string {
 ### Parent workflow protocol
 - Parent owns task routing, decisions, synthesis, and final user response.
 - Before acting, select the matching focused workflow skill: \`brainstorming\` for creative work/new behavior/design; \`writing-plans\` then \`executing-plans\` for multi-step implementation; \`systematic-debugging\` for bugs, test failures, or unexpected behavior; \`test-driven-development\` for testable changes; \`requesting-code-review\` for meaningful changes needing fresh review; \`verification-before-completion\` for completion claims.
+- Planner writes full plans to \`docs/plans/YYYY-MM-DD-<feature-name>.md\` and returns that saved path.
+- Workers and reviewers read explicit plan, spec, progress, or diff paths supplied by the parent.
+- Plan execution: execute one current unchecked plan task with one \`worker\`, validate it, review meaningful changes, route accepted fixes through \`worker\`, then advance to the next unchecked task.
+- Preserve planner commit steps. Parent may commit at the task boundary after validation and review unless the user says otherwise.
+- Brainstorming starts local context gathering and also starts \`researcher\` when external facts are needed, including library behavior, APIs, docs, standards, external references, or current best practices.
+- Clarifying questions remain focused and are asked before design approval when needed.
 - When the selected workflow calls for subagents, launch them before direct edits or fixes.
 - Bugs, test failures, or unexpected behavior: no direct fix; reproduce or capture the failure, then launch \`scout\` or \`context-builder\` before fix/worker unless delegation is explicitly disabled or unavailable.
 - New behavior or features: no direct implementation; use \`brainstorming\`, gather context, consult \`oracle\` when design tradeoffs exist, and get approval before implementation.

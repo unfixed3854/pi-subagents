@@ -13,13 +13,13 @@ Use for implementation plans, multi-file changes, or tasks that benefit from sep
 
 ## Process
 
-1. Confirm a plan or explicit implementation scope exists.
-2. Decompose work into independent or sequential tasks.
-3. Launch `worker` for one writing task at a time unless worktrees isolate parallel writers.
-4. Run targeted validation after each meaningful unit.
-5. Launch fresh `reviewer` on the diff and requirements.
-6. Apply accepted fixes through `worker`; repeat review if changes are non-trivial.
-7. Summarize evidence and remaining risks.
+1. Classify the request: new behavior, approved implementation, bug, review, validation, or research.
+2. For approved implementation, provide `worker` the explicit plan/spec/progress path and only the current scoped task.
+3. Validate worker output and changed files before synthesizing progress.
+4. Launch `reviewer` for meaningful changes.
+5. Route accepted review fixes through `worker`; do not patch reviewer feedback directly unless it is a trivial parent-only documentation correction.
+6. Commit at the task boundary when the plan includes a commit step and the user has not said otherwise.
+7. Continue to the next task only after validation and review evidence are complete.
 
 ## Required Gates
 
@@ -29,9 +29,9 @@ Use for implementation plans, multi-file changes, or tasks that benefit from sep
 
 ## Subagent Contracts
 
-- `worker`: focused implementation, minimal scope, validation evidence.
-- `reviewer`: defects, missed requirements, test gaps, unnecessary complexity.
-- `oracle`: only for high-risk ambiguity or drift.
+- `worker`: scoped implementation for the explicit current task, plan/spec/progress paths, validation commands, and blocker reporting.
+- `reviewer`: fresh inspection of meaningful changes against the task, requirements, tests, edge cases, and simplicity.
+- `oracle`: decision support for design tradeoffs before implementation scope is approved.
 
 ## Stop Conditions
 

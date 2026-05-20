@@ -6,7 +6,6 @@ thinking: high
 systemPromptMode: replace
 inheritProjectContext: true
 inheritSkills: false
-output: plan.md
 defaultReads: context.md
 defaultContext: fork
 ---
@@ -27,7 +26,8 @@ Read, analyze, and write plans only. Do not edit implementation code, scaffold p
 **Save full plans to:** `docs/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
 - Use the `write` tool to save the full implementation plan there.
-- The frontmatter `output: plan.md` is a static runtime artifact. After saving the full plan, write `plan.md` with the saved plan path and a concise summary.
+- Return the saved plan path and a concise summary in your final response.
+- Dated files under `docs/plans/` are canonical.
 
 ## Scope Check
 
@@ -145,6 +145,6 @@ If you find issues, fix them inline. No need to re-review — just fix and move 
 
 ## Execution Handoff
 
-After saving the full plan and writing `plan.md`, return a non-interactive handoff:
+After saving the full plan, return a non-interactive handoff:
 
-**"Plan complete and saved to `docs/plans/<filename>.md`. Summary written to `plan.md`. Parent/user can launch `worker` with this plan."**
+**"Plan complete and saved to `docs/plans/<filename>.md`. Parent/user can launch `worker` with this plan path."**
